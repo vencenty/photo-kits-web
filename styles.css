@@ -94,6 +94,24 @@ textarea {
     color: #2c3e50;
 }
 
+.upload-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.upload-header h3 {
+    margin-bottom: 0;
+    color: #2c3e50;
+}
+
+.spec-photo-count {
+    font-size: 14px;
+    color: #3498db;
+    font-weight: 600;
+}
+
 .upload-area {
     position: relative;
     padding: 40px 20px;
@@ -140,6 +158,72 @@ textarea {
     overflow: hidden;
     border-radius: 4px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transform: translateZ(0);
+    will-change: transform;
+    transition: transform 0.2s ease;
+}
+
+.photo-item:hover {
+    transform: translateZ(0) scale(1.05);
+}
+
+/* 上传中的样式 */
+.photo-item.uploading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.photo-item.uploading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    margin-top: -15px;
+    margin-left: -15px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+    z-index: 2;
+    will-change: transform;
+}
+
+.photo-item.upload-failed::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.3);
+    z-index: 1;
+}
+
+.retry-upload {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff3b30;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.retry-upload:hover {
+    background-color: #d9302b;
 }
 
 .photo-item img {
@@ -223,8 +307,7 @@ textarea {
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* 弹窗样式 */
@@ -247,12 +330,13 @@ textarea {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: modalopen 0.3s;
+    animation: modalopen 0.3s ease-out;
+    will-change: opacity, transform;
 }
 
 @keyframes modalopen {
-    from {opacity: 0; transform: translateY(-50px);}
-    to {opacity: 1; transform: translateY(0);}
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-header {
