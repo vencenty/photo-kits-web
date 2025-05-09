@@ -7,9 +7,6 @@ async function uploadPhoto(file, size) {
 
         // 添加头信息
         const headers = {
-            'Country': 'DE',
-            'Lang': 'en',
-            'X-Sign': 'apikey'
         };
 
         // 调用实际API
@@ -23,14 +20,14 @@ async function uploadPhoto(file, size) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const data = await response.json();
+        const responseJson = await response.json();
 
         // 如果API返回格式不同，请根据实际情况调整
         return {
             success: true,
             data: {
                 id: 'photo_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
-                url: data.url || URL.createObjectURL(file), // 使用服务器返回的URL或本地URL
+                url: responseJson.data.url, // 使用服务器返回的URL或本地URL
                 name: file.name,
                 size: size
             },
@@ -103,10 +100,6 @@ async function submitOrder(orderData) {
 
         // 添加头信息
         const headers = {
-            'Country': 'DE',
-            'Lang': 'en',
-            'X-Sign': 'apikey',
-            'Content-Type': 'application/json'
         };
 
         // 调用实际API
